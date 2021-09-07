@@ -9,8 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var test int = 1
-
 func main() {
 
 	var cmdBuild = &cobra.Command{
