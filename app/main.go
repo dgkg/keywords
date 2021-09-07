@@ -1,39 +1,25 @@
 package main
 
 import (
-	"bytes"
-	"errors"
+	"keywords/app/handler"
 	"log"
-	"math/rand"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
+
+	"keywords/app/config"
 )
-
-type Config struct {
-	Port    string
-	ModeEnv string
-}
-
-var config Config
-
-func init() {
-	viper.SetConfigType("yaml")
-	viper.ReadConfig(bytes.NewBuffer(yamlExample))
-	config.Port = viper.GetString("port")
-	config.ModeEnv = viper.GetString("mode")
-}
 
 func main() {
 	router := gin.Default()
 
-	router.GET("/health-check", HealthCheck)
-	log.Println("Mode : ", config.ModeEnv)
+	router.GET("/health-check", handler.HealthCheck)
+	conf := config.New()
+	log.Println("Mode : ", conf.ModeEnv)
 
 	srv := &http.Server{
-		Addr:              ":" + config.Port,
+		Addr:              ":" + conf.Port,
 		Handler:           router,
 		ReadTimeout:       time.Second,
 		WriteTimeout:      time.Second,
@@ -44,48 +30,3 @@ func main() {
 
 	srv.ListenAndServe()
 }
-
-func HealthCheck(ctx *gin.Context) {
-	authValue := ctx.GetHeader("Authorization")
-	if len(authValue) == 0 {
-		log.Println(errors.New("user not authorized"))
-		ctx.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": HealthcheckStatusRandom(), // ok, altered, down.
-	})
-}
-
-type StatusHealthcheck uint8
-
-func (h StatusHealthcheck) String() string {
-	return healthcheckTbl[h]
-}
-
-const (
-	StatusOK StatusHealthcheck = iota + 1
-	StatusAltered
-	StatusDown
-)
-
-var healthcheckTbl = [...]string{
-	0:             "unknown",
-	StatusOK:      "ok",
-	StatusAltered: "altered",
-	StatusDown:    "down",
-}
-
-func HealthcheckStatusRandom() string {
-	res := rand.Intn(len(healthcheckTbl))
-	if res == 0 {
-		res++
-	}
-	return healthcheckTbl[res]
-}
-
-// any approach to require this configuration into your program.
-var yamlExample = []byte(`
-mode: production
-port: 8081
-`)
