@@ -28,7 +28,7 @@ func init() {
 
 func main() {
 	router := gin.Default()
-	router.POST("/login", Login)
+
 	router.GET("/health-check", HealthCheck)
 	log.Println("Mode : ", config.ModeEnv)
 
@@ -55,29 +55,6 @@ func HealthCheck(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": HealthcheckStatusRandom(), // ok, altered, down.
 	})
-}
-
-func Login(ctx *gin.Context) {
-	var payload PayloadLogin
-	err := ctx.BindJSON(&payload)
-	if err != nil {
-		log.Println(err)
-		ctx.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-	if payload.User != "root" || payload.Password != "password" {
-		log.Println(errors.New("user not authorized"))
-		ctx.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
-	ctx.JSON(http.StatusOK, gin.H{
-		"jwt": "jwt_value",
-	})
-}
-
-type PayloadLogin struct {
-	User     string `json:"user"`
-	Password string `json:"pass"`
 }
 
 type StatusHealthcheck uint8

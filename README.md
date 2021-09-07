@@ -8,7 +8,7 @@
 
 call:
 ```sh
-curl -X POST /login -d '{ "user":"root", "pass":"password" }'
+curl -X POST localhost:8080/login -d '{ "user":"root", "pass":"password" }'
 ```
 
 returns:
@@ -31,7 +31,7 @@ error:
 
 call:
 ```sh
-curl -X GET /health-check -H '"Authorization: Baerer jwt_value"'
+curl -X GET localhost:8081/health-check -H 'Authorization: Baerer jwt_value'
 ```
 
 returns:
