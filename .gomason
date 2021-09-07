@@ -1,0 +1,7 @@
+[user]
+    email = henrilepic@gmail.com
+    username = henripic
+    passwordfunc = lpass show --notes gomason-test
+
+[signing]
+    program = gpg

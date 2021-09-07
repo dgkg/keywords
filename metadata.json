@@ -1,0 +1,5 @@
+{
+	"package": "github.com/dgkg/keywords",
+	"version": "0.1.0",
+	"description": "A tool for building and testing your project in a clean GOPATH."
+}
