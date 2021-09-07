@@ -1,23 +1,45 @@
 package main
 
 import (
-	"fmt"
+	"errors"
+	. "math"
 )
 
+var test int = 1
+
 func main() {
-	// 	Créez et initialisez une map m avec en clée des strings et en valeur des ints
-	m := make(map[string]int)
-	// Créez une variable de type rune nommée letter et initialiser sa valeur à 'a'
-	var letter rune = 'a'
-	// Créez une boucle for avec i comme itérateur sur 26 éléments
-	for i := 0; i < 26; i++ {
-		// Insérer dans m la valeur de letter après l’avoir casté en string comme clée
-		// et comme valeur insérer l’incrément i de la boucle for
-		m[string(letter)] = i
-		// Auto-incrémentez la valeur de letter
-		letter++
+	//
+}
+
+type MyInt int32
+
+func (mi MyInt) Add(i int) (MyInt, error) {
+	res := int64(mi) + int64(i)
+	if res > MaxInt32 {
+		return -1, errors.New("out of range")
 	}
-	// Après la boucle for afficher la valeur de la clé "w" dans la map m
-	// via la fonction fmt.Println( ).
-	fmt.Println(m["w"])
+	return MyInt(res), nil
+}
+
+func (mi MyInt) Sub(i int) (MyInt, error) {
+	res := int64(mi) - int64(i)
+	if res < MinInt32 {
+		return -1, errors.New("out of range")
+	}
+	return MyInt(res), nil
+}
+
+func (mi MyInt) Multiply(i int) (MyInt, error) {
+	res := int64(mi) * int64(i)
+	if res > MaxInt32 {
+		return -1, errors.New("out of range")
+	}
+	return MyInt(res), nil
+}
+
+func (mi MyInt) Divide(i int) (MyInt, error) {
+	if i == 0 {
+		return -1, errors.New("try to divide by 0")
+	}
+	return mi / MyInt(i), nil
 }
