@@ -75,6 +75,5 @@ func MiddlewareJWT(key string) gin.HandlerFunc {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
-		ctx.Next()
 	}
 }

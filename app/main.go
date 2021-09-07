@@ -10,13 +10,14 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"keywords/app/config"
+	logTime "keywords/src/log"
 )
 
 func main() {
 	router := gin.Default()
 	conf := config.New()
 
-	router.GET("/health-check", jwt.MiddlewareJWT(conf.JWTSignKey), handler.HealthCheck)
+	router.GET("/health-check", logTime.MiddlewareLogTime(), jwt.MiddlewareJWT(conf.JWTSignKey), handler.HealthCheck)
 	log.Println("Mode : ", conf.ModeEnv)
 
 	srv := &http.Server{
