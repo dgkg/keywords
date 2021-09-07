@@ -7,16 +7,21 @@ import (
 )
 
 type Config struct {
-	Port    string
-	ModeEnv string
+	Port       string
+	ModeEnv    string
+	JWTSignKey string
 }
 
 func New() *Config {
 	viper.SetConfigType("yaml")
-	viper.ReadConfig(bytes.NewBuffer(yamlExample))
+	err := viper.ReadConfig(bytes.NewBuffer(yamlExample))
+	if err != nil {
+		panic(err)
+	}
 	var config Config
 	config.Port = viper.GetString("port")
 	config.ModeEnv = viper.GetString("mode")
+	config.JWTSignKey = viper.GetString("jwtSignKey")
 	return &config
 }
 
@@ -24,4 +29,5 @@ func New() *Config {
 var yamlExample = []byte(`
 mode: production
 port: 8081
+jwtSignKey: secret
 `)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"keywords/app/handler"
+	"keywords/src/jwt"
 	"log"
 	"net/http"
 	"time"
@@ -13,9 +14,9 @@ import (
 
 func main() {
 	router := gin.Default()
-
-	router.GET("/health-check", handler.HealthCheck)
 	conf := config.New()
+
+	router.GET("/health-check", jwt.MiddlewareJWT(conf.JWTSignKey), handler.HealthCheck)
 	log.Println("Mode : ", conf.ModeEnv)
 
 	srv := &http.Server{
@@ -28,5 +29,5 @@ func main() {
 		MaxHeaderBytes:    8 << 10,
 	}
 
-	srv.ListenAndServe()
+	log.Println(srv.ListenAndServe())
 }
