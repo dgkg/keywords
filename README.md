@@ -8,7 +8,8 @@
 
 call:
 ```sh
-curl -X POST localhost:8080/login -d '{ "user":"root", "pass":"password" }'
+curl -X POST localhost:8080/login -d '{ "login":"casper", "pass":"Tatata" }'
+curl -X POST localhost:8080/login -d '{ "login":"boss", "pass":"bibibi" }'
 ```
 
 returns:

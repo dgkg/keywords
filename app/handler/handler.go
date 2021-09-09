@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"errors"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,13 +9,19 @@ import (
 )
 
 func HealthCheck(ctx *gin.Context) {
-	authValue := ctx.GetHeader("Authorization")
-	if len(authValue) == 0 {
-		log.Println(errors.New("user not authorized"))
-		ctx.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": model.HealthcheckStatusRandom(), // ok, altered, down.
 	})
+}
+
+func DisplayStats(ctx *gin.Context) {
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"stats": model.HealthcheckStatusRandom(), // ok, altered, down.
+	})
+}
+
+type Stats struct {
+	BytesReceived uint64
 }

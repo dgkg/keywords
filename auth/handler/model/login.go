@@ -1,6 +1,6 @@
 package model
 
 type PayloadLogin struct {
-	User     string `json:"user"`
+	Login    string `json:"login"`
 	Password string `json:"pass"`
 }

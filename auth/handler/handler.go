@@ -11,6 +11,21 @@ import (
 	"keywords/src/jwt"
 )
 
+var dataUser = map[string]model.User{
+	"casper": {
+		ID:          "1bd7f4b5-2249-4206-8d82-86ae7ccd59ee",
+		Name:        "Casper",
+		Password:    "Tatata",
+		AccessLevel: 1,
+	},
+	"boss": {
+		ID:          "f791ed48-64f8-4dc6-8507-845e149286f2",
+		Name:        "The Boss",
+		Password:    "bibibi",
+		AccessLevel: 10,
+	},
+}
+
 func Login(ctx *gin.Context) {
 	var payload model.PayloadLogin
 	err := ctx.BindJSON(&payload)
@@ -19,13 +34,15 @@ func Login(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	if payload.User != "root" || payload.Password != "password" {
+
+	res, ok := dataUser[payload.Login]
+	if !ok || res.Password != payload.Password {
 		log.Println(errors.New("user not authorized"))
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
 
-	jwtValue, err := jwt.New("c4209493-df64-45fc-9cc1-ae845e820e29", "1", "Rob Pike")
+	jwtValue, err := jwt.New(res.AccessLevel, res.ID, res.Name)
 	if err != nil {
 		log.Println(errors.New("user not authorized"))
 		ctx.AbortWithStatus(http.StatusInternalServerError)

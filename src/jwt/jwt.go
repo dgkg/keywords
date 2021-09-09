@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -13,14 +14,14 @@ import (
 
 type CustomPayload struct {
 	jwt.Payload
-	AccessLevel string `json:"access_level,omitempty"`
+	AccessLevel int    `json:"access_level,omitempty"`
 	UserName    string `json:"user_name,omitempty"`
 	UUIDUser    string `json:"uuid_user,omitempty"`
 }
 
 var hs = jwt.NewHS256([]byte("secret"))
 
-func New(uuid, level, userName string) (string, error) {
+func New(level int, uuid, userName string) (string, error) {
 	now := time.Now()
 	pl := CustomPayload{
 		Payload: jwt.Payload{
@@ -53,17 +54,17 @@ func valid(key, token string) error {
 	return nil
 }
 
-func MiddlewareJWT(key string) gin.HandlerFunc {
+func MiddlewareJWT(key string, minLevelAccess int) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authValue := ctx.GetHeader("Authorization")
 		if len(authValue) == 0 {
-			log.Println(errors.New("user not authorized"))
+			log.Println(errors.New("0 user not authorized"))
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
 		log.Println("authValue", authValue)
 		if !strings.Contains(authValue, "Baerer") {
-			log.Println(errors.New("user not authorized"))
+			log.Println(errors.New("1 user not authorized"))
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
@@ -71,9 +72,23 @@ func MiddlewareJWT(key string) gin.HandlerFunc {
 		authValue = strings.ReplaceAll(authValue, "Baerer ", "")
 		err := valid(key, authValue)
 		if err != nil {
+			log.Println(errors.New("2 user not authorized"))
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+		var payload CustomPayload
+		_, err = jwt.Verify([]byte(authValue), hs, &payload)
+		if err != nil {
+			log.Println(errors.New("3 user not authorized"))
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+		fmt.Println("payload", payload)
+		if payload.AccessLevel < minLevelAccess {
 			log.Println(errors.New("user not authorized"))
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
+		fmt.Println("authorized !!!!")
 	}
 }

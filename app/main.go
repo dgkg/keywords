@@ -17,7 +17,8 @@ func main() {
 	router := gin.Default()
 	conf := config.New()
 
-	router.GET("/health-check", logTime.MiddlewareLogTime(), jwt.MiddlewareJWT(conf.JWTSignKey), handler.HealthCheck)
+	router.GET("/health-check", logTime.MiddlewareLogTime(), jwt.MiddlewareJWT(conf.JWTSignKey, 1), handler.HealthCheck)
+	router.GET("/stats", jwt.MiddlewareJWT(conf.JWTSignKey, 3), handler.DisplayStats)
 	log.Println("Mode : ", conf.ModeEnv)
 
 	srv := &http.Server{
