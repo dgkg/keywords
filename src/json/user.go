@@ -25,7 +25,7 @@ func init() {
 }
 
 // BirthDate is used to communicate with JSON format the time.Time
-// with the UTC+1.
+// with the UTC+1 in the YYY-MM-DD format.
 type BirthDate time.Time
 
 // String implement the Stringer interface in the pkg fmt.
@@ -67,7 +67,9 @@ func (bd BirthDate) MarshalJSON() ([]byte, error) {
 // User is a regular user un our application.
 type User struct {
 	// Name is use for the concatenation firstname and lastname.
-	Name string
+	Name string `json:"name"`
 	// BirthDate is the birthdate of the user.
-	BirthDate BirthDate
+	BirthDate BirthDate `json:"birthdate"`
+
+	Password Password `json:"password"`
 }

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func ExampleString() {
+func ExampleBirthDate_string() {
 	var u User = User{
 		Name:      "Bob",
 		BirthDate: BirthDate(time.Date(2007, 1, 2, 0, 0, 0, 0, time.FixedZone("UTC+1", 1*60*60))),

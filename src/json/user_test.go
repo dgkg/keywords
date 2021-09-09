@@ -1,7 +1,9 @@
 package json_test
 
 import (
+	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -14,6 +16,7 @@ func TestUserMarshalJSONUnmarshalJSON(t *testing.T) {
 	var u internalJSON.User = internalJSON.User{
 		Name:      "Bob",
 		BirthDate: internalJSON.BirthDate(date),
+		Password:  []byte("this-is-my-pass"),
 	}
 
 	data, err := json.Marshal(&u)
@@ -43,11 +46,17 @@ func TestUserMarshalJSONUnmarshalJSON(t *testing.T) {
 		t.Errorf("wrong bithdate %v wait for %v", u2.BirthDate, date)
 	}
 
-	// if !reflect.DeepEqual(u2.BirthDate, date) {
-	// 	t.Errorf("wrong bithdate %v wait for %v", u2.BirthDate, date)
-	// }
+	refPass := base64.StdEncoding.EncodeToString([]byte("this-is-my-pass"))
+	resRefPass, _ := internalJSON.HashPassword([]byte(refPass), []byte(`this-is-my-salt`))
+	ok, err := internalJSON.Authenticate(u2.Password, []byte(refPass), resRefPass)
+	fmt.Println("ok", ok)
+	fmt.Println("err", err)
+
 }
 
-func TestUserMarshalJSON(t *testing.T) {
-
+func TestBirthDate_string(t *testing.T) {
+	var bd internalJSON.BirthDate = internalJSON.BirthDate(time.Date(2007, 1, 2, 0, 0, 0, 0, time.FixedZone("UTC+1", 1*60*60)))
+	if bd.String() != "2007-01-02" {
+		t.Errorf("wrong bithdate %v", bd)
+	}
 }
