@@ -13,14 +13,14 @@ type User struct {
 }
 
 func (u *User) UnmarshalJSON(b []byte) error {
-	aux := struct {
-		Name      string `json:"name"`
-		BirthDate string `json:"birthdate"`
-	}{}
-
+	var aux userAux
 	err := json.Unmarshal(b, &aux)
 	if err != nil {
 		return err
+	}
+
+	if len(aux.BirthDate) == 0 {
+		aux.BirthDate = "0000-00-00"
 	}
 
 	u.Name = aux.Name
@@ -34,12 +34,13 @@ func (u *User) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (u User) MarshalJSON() ([]byte, error) {
-	aux := struct {
-		Name      string `json:"name"`
-		BirthDate string `json:"birthdate"`
-	}{
+type userAux struct {
+	Name      string `json:"name"`
+	BirthDate string `json:"birthdate"`
+}
 
+func (u User) MarshalJSON() ([]byte, error) {
+	aux := userAux{
 		Name:      u.Name,
 		BirthDate: u.BirthDate.Format(DateFormat),
 	}
