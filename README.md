@@ -50,9 +50,6 @@ error:
 }
 ```
 
-
-
-
 ### Authenticate with JWT
 
 ```json
