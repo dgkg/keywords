@@ -10,7 +10,7 @@ const (
 	// DateFormat is the standard way to communicate date with JSON.
 	DateFormat = "2006-01-02"
 	// LocationParis by default the application uses the localisation time
-	// of Paris UTC+2.
+	// of Paris UTC+1.
 	LocationParis = "Europe/Paris"
 )
 
@@ -24,12 +24,16 @@ func init() {
 	}
 }
 
+// BirthDate is used to communicate with JSON format the time.Time
+// with the UTC+1.
 type BirthDate time.Time
 
+// String implement the Stringer interface in the pkg fmt.
 func (bd BirthDate) String() string {
 	return time.Time(bd).Format(DateFormat)
 }
 
+// UnmarshalJSON implements the Unmarshaler interface of the encoding/json std package.
 func (bd *BirthDate) UnmarshalJSON(b []byte) error {
 	if bd == nil {
 		return nil
@@ -55,11 +59,15 @@ func (bd *BirthDate) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MarshalJSON is implementing the encoding/json interface Marshaler.
 func (bd BirthDate) MarshalJSON() ([]byte, error) {
 	return json.Marshal(bd.String())
 }
 
+// User is a regular user un our application.
 type User struct {
-	Name      string
+	// Name is use for the concatenation firstname and lastname.
+	Name string
+	// BirthDate is the birthdate of the user.
 	BirthDate BirthDate
 }
