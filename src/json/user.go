@@ -25,7 +25,8 @@ func (u *User) UnmarshalJSON(b []byte) error {
 
 	u.Name = aux.Name
 
-	t, err := time.Parse(DateFormat, aux.BirthDate)
+	t, err := time.ParseInLocation(DateFormat, aux.BirthDate, time.FixedZone("UTC+2", 2*60*60))
+
 	if err != nil {
 		return err
 	}
