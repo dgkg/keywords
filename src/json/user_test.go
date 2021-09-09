@@ -1,7 +1,7 @@
 package json_test
 
 import (
-	"encoding/base64"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -16,13 +16,15 @@ func TestUserMarshalJSONUnmarshalJSON(t *testing.T) {
 	var u internalJSON.User = internalJSON.User{
 		Name:      "Bob",
 		BirthDate: internalJSON.BirthDate(date),
-		Password:  []byte("this-is-my-pass"),
+		Password:  "this-is-my-pass",
 	}
 
 	data, err := json.Marshal(&u)
 	if err != nil {
 		t.Errorf("error marshal %v", err)
 	}
+
+	fmt.Println(string(data))
 
 	var u2 internalJSON.User
 	err = json.Unmarshal(data, &u2)
@@ -46,11 +48,17 @@ func TestUserMarshalJSONUnmarshalJSON(t *testing.T) {
 		t.Errorf("wrong bithdate %v wait for %v", u2.BirthDate, date)
 	}
 
-	refPass := base64.StdEncoding.EncodeToString([]byte("this-is-my-pass"))
-	resRefPass, _ := internalJSON.HashPassword([]byte(refPass), []byte(`this-is-my-salt`))
-	ok, err := internalJSON.Authenticate(u2.Password, []byte(refPass), resRefPass)
-	fmt.Println("ok", ok)
-	fmt.Println("err", err)
+	h := sha256.New()
+	h.Write([]byte("this-is-my-pass"))
+	refPass := fmt.Sprintf("%x", h.Sum(nil))
+
+	h = sha256.New()
+	h.Write([]byte("this-is-my-pass"))
+	u2.Password = internalJSON.Password(fmt.Sprintf("%x", h.Sum(nil)))
+
+	if internalJSON.Password(refPass) != u2.Password {
+		t.Errorf("wrong password %v wait for %v", string(u2.Password), string(refPass))
+	}
 
 }
 

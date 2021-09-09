@@ -71,5 +71,5 @@ type User struct {
 	// BirthDate is the birthdate of the user.
 	BirthDate BirthDate `json:"birthdate"`
 
-	Password Password `json:"password"`
+	Password Password `json:"password,omitempty"`
 }
