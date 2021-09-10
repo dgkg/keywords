@@ -27,7 +27,7 @@ func New() *Config {
 
 // any approach to require this configuration into your program.
 var yamlExample = []byte(`
-mode: production
+mode: testing
 port: 8080
 dbname: mylittle.db
 `)

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -30,13 +31,15 @@ func (s *Service) Login(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-
+	start := time.Now()
 	res, err := s.db.GetUserByLogin(payload.Login)
 	if err != nil {
 		log.Println(errors.New("user not authorized"))
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
+	since := time.Since(start)
+	log.Println("db action took:", since)
 
 	if res.Password != payload.Password {
 		log.Println(errors.New("user not authorized"))

@@ -9,10 +9,18 @@ import (
 
 	"github.com/dgkg/keywords/auth/config"
 	"github.com/dgkg/keywords/auth/handler"
+	"github.com/dgkg/keywords/db"
 	"github.com/dgkg/keywords/db/bolt"
+	"github.com/dgkg/keywords/db/moke"
+)
+
+const (
+	EnvProd = "production"
+	EnvTest = "testing"
 )
 
 func main() {
+
 	// get config.
 	config := config.New()
 	log.Println("Mode : ", config.ModeEnv)
@@ -21,8 +29,15 @@ func main() {
 	router := gin.Default()
 
 	log.Println("creating db")
+	var db db.Storer
 	// create db connection.
-	db := bolt.New(config.DBName, 1)
+	if config.ModeEnv == EnvTest {
+		log.Println("create moke DB.")
+		db = moke.New()
+	} else {
+		log.Println("create Bolt DB.")
+		db = bolt.New(config.DBName)
+	}
 	log.Println("success create db")
 
 	// create routes.
