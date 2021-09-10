@@ -9,6 +9,7 @@ import (
 
 	"keywords/auth/config"
 	"keywords/auth/handler"
+	"keywords/db/bolt"
 )
 
 func main() {
@@ -19,8 +20,15 @@ func main() {
 	// create router.
 	router := gin.Default()
 
+	log.Println("creating db")
+	// create db connection.
+	db := bolt.New(config.DBName, 1)
+	log.Println("success create db")
+
 	// create routes.
-	router.POST("/login", handler.Login)
+	service := handler.New(db)
+	log.Println("create handler:")
+	router.POST("/login", service.Login)
 
 	// init server.
 	srv := &http.Server{
@@ -32,6 +40,8 @@ func main() {
 		IdleTimeout:       time.Second,
 		MaxHeaderBytes:    8 << 10,
 	}
+
+	log.Println("listend PORT:", srv.Addr)
 	// run server.
 	srv.ListenAndServe()
 }

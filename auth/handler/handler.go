@@ -8,25 +8,21 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"keywords/auth/handler/model"
+	"keywords/db"
 	"keywords/src/jwt"
 )
 
-var dataUser = map[string]model.User{
-	"casper": {
-		ID:          "1bd7f4b5-2249-4206-8d82-86ae7ccd59ee",
-		Name:        "Casper",
-		Password:    "Tatata",
-		AccessLevel: 1,
-	},
-	"boss": {
-		ID:          "f791ed48-64f8-4dc6-8507-845e149286f2",
-		Name:        "The Boss",
-		Password:    "bibibi",
-		AccessLevel: 10,
-	},
+type Service struct {
+	db db.Storer
 }
 
-func Login(ctx *gin.Context) {
+func New(db db.Storer) *Service {
+	return &Service{
+		db: db,
+	}
+}
+
+func (s *Service) Login(ctx *gin.Context) {
 	var payload model.PayloadLogin
 	err := ctx.BindJSON(&payload)
 	if err != nil {
@@ -35,8 +31,14 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	res, ok := dataUser[payload.Login]
-	if !ok || res.Password != payload.Password {
+	res, err := s.db.GetUserByLogin(payload.Login)
+	if err != nil {
+		log.Println(errors.New("user not authorized"))
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	if res.Password != payload.Password {
 		log.Println(errors.New("user not authorized"))
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return

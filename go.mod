@@ -3,11 +3,13 @@ module keywords
 go 1.17
 
 require (
+	github.com/boltdb/bolt v1.3.1
 	github.com/gbrlsnchs/jwt/v3 v3.0.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.8.1
+	golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6
 )
 
 require (

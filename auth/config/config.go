@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Port    string
 	ModeEnv string
+	DBName  string
 }
 
 func New() *Config {
@@ -20,6 +21,7 @@ func New() *Config {
 	var c Config
 	c.Port = viper.GetString("port")
 	c.ModeEnv = viper.GetString("mode")
+	c.DBName = viper.GetString("dbname")
 	return &c
 }
 
@@ -27,4 +29,5 @@ func New() *Config {
 var yamlExample = []byte(`
 mode: production
 port: 8080
+dbname: mylittle.db
 `)

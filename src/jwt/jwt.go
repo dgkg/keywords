@@ -16,12 +16,12 @@ type CustomPayload struct {
 	jwt.Payload
 	AccessLevel int    `json:"access_level,omitempty"`
 	UserName    string `json:"user_name,omitempty"`
-	UUIDUser    string `json:"uuid_user,omitempty"`
+	UUIDUser    uint64 `json:"uuid_user,omitempty"`
 }
 
 var hs = jwt.NewHS256([]byte("secret"))
 
-func New(level int, uuid, userName string) (string, error) {
+func New(level int, uuid uint64, userName string) (string, error) {
 	now := time.Now()
 	pl := CustomPayload{
 		Payload: jwt.Payload{
