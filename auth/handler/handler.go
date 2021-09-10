@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"keywords/auth/handler/model"
-	"keywords/db"
-	"keywords/src/jwt"
+	"github.com/dgkg/keywords/auth/handler/model"
+	"github.com/dgkg/keywords/db"
+	"github.com/dgkg/keywords/src/jwt"
 )
 
 type Service struct {

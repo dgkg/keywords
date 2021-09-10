@@ -1,4 +1,4 @@
-module keywords
+module github.com/dgkg/keywords
 
 go 1.17
 
@@ -9,7 +9,7 @@ require (
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.8.1
-	golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6
+	golang.org/x/exp v0.0.0-20210909165118-5314dedadbaa
 )
 
 require (
@@ -29,7 +29,7 @@ require (
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/pelletier/go-toml v1.9.3 // indirect
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect

@@ -5,7 +5,7 @@ import (
 
 	xRand "golang.org/x/exp/rand"
 
-	srcRand "keywords/src/rand"
+	srcRand "github.com/dgkg/keywords/src/rand"
 )
 
 type User struct {

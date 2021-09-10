@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"keywords/app/model"
+	"github.com/dgkg/keywords/app/model"
 )
 
 func HealthCheck(ctx *gin.Context) {

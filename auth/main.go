@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"keywords/auth/config"
-	"keywords/auth/handler"
-	"keywords/db/bolt"
+	"github.com/dgkg/keywords/auth/config"
+	"github.com/dgkg/keywords/auth/handler"
+	"github.com/dgkg/keywords/db/bolt"
 )
 
 func main() {

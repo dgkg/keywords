@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	internalJSON "keywords/src/json"
+	internalJSON "github.com/dgkg/keywords/src/json"
 )
 
 func TestUserMarshalJSONUnmarshalJSON(t *testing.T) {

@@ -1,16 +1,16 @@
 package main
 
 import (
-	"keywords/app/handler"
-	"keywords/src/jwt"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 
-	"keywords/app/config"
-	logTime "keywords/src/log"
+	"github.com/dgkg/keywords/app/config"
+	"github.com/dgkg/keywords/app/handler"
+	"github.com/dgkg/keywords/src/jwt"
+	logTime "github.com/dgkg/keywords/src/log"
 )
 
 func main() {

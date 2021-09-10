@@ -6,8 +6,8 @@ import (
 
 	"github.com/boltdb/bolt"
 
-	"keywords/auth/handler/model"
-	"keywords/db"
+	"github.com/dgkg/keywords/auth/handler/model"
+	"github.com/dgkg/keywords/db"
 )
 
 var bucketUser []byte = []byte("user")
@@ -60,6 +60,8 @@ func initDB(path string) *bolt.DB {
 
 	return db
 }
+
+var _ db.Storer = &Store{}
 
 func New(path string, init ...int) *Store {
 	var db *bolt.DB
